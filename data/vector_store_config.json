@@ -1,0 +1,6 @@
+{
+  "embedding_model": "BAAI/bge-small-en-v1.5",
+  "embedding_dimensions": 384,
+  "collection_name": "hdfc_mutual_fund_corpus",
+  "indexed_at": "2026-05-08T23:40:28"
+}

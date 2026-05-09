@@ -1,0 +1,186 @@
+name: Refresh Corpus
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Triggers
+# ─────────────────────────────────────────────────────────────────────────────
+on:
+  # Monthly schedule — 1st of every month at 06:00 UTC
+  # Aligned with Groww's factsheet update cycle
+  schedule:
+    - cron: "0 6 1 * *"
+
+  # Manual trigger from GitHub Actions UI — force a refresh at any time
+  workflow_dispatch:
+    inputs:
+      force_reindex:
+        description: "Force re-embed and re-index even if chunks are unchanged"
+        required: false
+        default: "true"
+        type: boolean
+
+  # Re-index automatically when scraping or chunking logic changes
+  push:
+    branches:
+      - main
+    paths:
+      - "scripts/collect_documents.py"
+      - "scripts/process_documents.py"
+      - "scripts/embed_and_index.py"
+      - "config.py"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Concurrency — prevent overlapping runs
+# ─────────────────────────────────────────────────────────────────────────────
+concurrency:
+  group: corpus-refresh
+  cancel-in-progress: false   # never cancel a running refresh mid-way
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Job 1: Refresh corpus (scrape → chunk → embed → index → commit back)
+# ─────────────────────────────────────────────────────────────────────────────
+jobs:
+  refresh-corpus:
+    name: Refresh Corpus
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      # ── 1. Checkout ──────────────────────────────────────────────────────
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_PAT }}   # needs write scope to commit back
+          fetch-depth: 1
+
+      # ── 2. Python setup ──────────────────────────────────────────────────
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      # ── 3. Install Python dependencies ───────────────────────────────────
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # ── 4. Install Playwright Chromium ───────────────────────────────────
+      - name: Install Playwright Chromium
+        run: python -m playwright install chromium --with-deps
+
+      # ── 5. Phase 1 — Scrape Groww fund pages ─────────────────────────────
+      - name: Phase 1 — Collect documents
+        run: python scripts/collect_documents.py --force
+        env:
+          PYTHONUNBUFFERED: "1"
+
+      # ── 6. Phase 2 — Process and chunk ───────────────────────────────────
+      - name: Phase 2 — Process documents
+        run: python scripts/process_documents.py --force
+        env:
+          PYTHONUNBUFFERED: "1"
+
+      # ── 7. Phase 3 — Embed and index ─────────────────────────────────────
+      # NOTE: Embeddings use local sentence-transformers — no API key needed.
+      # Groq API key is only needed for Phase 4 (LLM generation at query time,
+      # not during the corpus refresh pipeline).
+      - name: Phase 3 — Embed and index
+        run: python scripts/embed_and_index.py --force
+        env:
+          PYTHONUNBUFFERED: "1"
+
+      # ── 8. Validate corpus after refresh ─────────────────────────────────
+      - name: Validate corpus
+        run: python scripts/validate_corpus.py
+
+      # ── 9. Upload raw files as artifacts (30-day retention) ──────────────
+      - name: Upload raw files as artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: raw-fund-pages-${{ github.run_id }}
+          path: data/raw/*.txt
+          retention-days: 30
+          if-no-files-found: warn
+
+      # ── 10. Upload processed chunks as artifact ───────────────────────────
+      - name: Upload processed chunks as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: processed-chunks-${{ github.run_id }}
+          path: |
+            data/processed/chunks.jsonl
+            data/processed/processing_log.json
+          retention-days: 30
+          if-no-files-found: warn
+
+      # ── 11. Commit updated registry and chunks back to repo ───────────────
+      # Only commits if files actually changed — avoids empty commits
+      - name: Commit updated corpus data
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add data/source_registry.json
+          git add data/processed/chunks.jsonl
+          git add data/processed/processing_log.json
+
+          # Only commit if there are staged changes
+          if git diff --cached --quiet; then
+            echo "No changes to commit — corpus is already up to date."
+          else
+            TIMESTAMP=$(date -u +"%Y-%m-%d %H:%M UTC")
+            git commit -m "chore: auto-refresh corpus [${TIMESTAMP}]
+
+          Triggered by: ${{ github.event_name }}
+          Run ID: ${{ github.run_id }}
+          Schemes refreshed: 5 HDFC fund pages"
+
+            git push
+            echo "Corpus committed and pushed successfully."
+          fi
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # Job 2: Open a GitHub Issue on failure
+  # ─────────────────────────────────────────────────────────────────────────
+  notify-on-failure:
+    name: Notify on Failure
+    runs-on: ubuntu-latest
+    needs: refresh-corpus
+    if: failure()
+
+    steps:
+      - name: Create failure issue
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GH_PAT }}
+          script: |
+            const runUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const body = [
+              "## ⚠️ Corpus Refresh Failed",
+              "",
+              `The scheduled corpus refresh failed on **${new Date().toUTCString()}**.`,
+              "",
+              "**The assistant is currently serving from the last successfully committed corpus.**",
+              "",
+              `**Failed run:** [View logs](${runUrl})`,
+              "",
+              "### What to check",
+              "- Groww page structure may have changed (EC-1.3 — schema mismatch)",
+              "- Groww may be rate-limiting the scraper (EC-1.7)",
+              "- sentence-transformers model download may have failed (EC-3.1)",
+              "- Check the run logs for the specific error",
+              "",
+              "### Action required",
+              "1. Review the failed run logs",
+              "2. Fix the issue",
+              "3. Trigger a manual refresh via `workflow_dispatch`",
+            ].join("\n");
+
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `[Auto] Corpus refresh failed — ${new Date().toISOString().slice(0, 10)}`,
+              body: body,
+              labels: ["corpus-refresh", "automated"],
+            });

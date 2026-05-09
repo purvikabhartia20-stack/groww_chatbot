@@ -1,0 +1,118 @@
+{
+  "passed": 10,
+  "total": 10,
+  "pass_rate": "10/10",
+  "production_ready": true,
+  "results": [
+    {
+      "query": "What is the exit load for HDFC ELSS Tax Saver Fund?",
+      "expected_scheme": "HDFC ELSS Tax Saver Fund",
+      "expected_section": "exit_load",
+      "got_scheme": "HDFC ELSS Tax Saver Fund",
+      "got_section": "faq",
+      "similarity": 0.8004,
+      "scheme_match": true,
+      "section_match": false,
+      "passed": true
+    },
+    {
+      "query": "What is the expense ratio of HDFC Mid Cap Fund?",
+      "expected_scheme": "HDFC Mid Cap Fund",
+      "expected_section": "nav_sip_aum",
+      "got_scheme": "HDFC Mid Cap Fund",
+      "got_section": "faq",
+      "similarity": 0.8881,
+      "scheme_match": true,
+      "section_match": false,
+      "passed": true
+    },
+    {
+      "query": "What is the minimum SIP amount for HDFC Large Cap Fund?",
+      "expected_scheme": "HDFC Large Cap Fund",
+      "expected_section": "minimum_investment",
+      "got_scheme": "HDFC Large Cap Fund",
+      "got_section": "about",
+      "similarity": 0.8038,
+      "scheme_match": true,
+      "section_match": false,
+      "passed": true
+    },
+    {
+      "query": "What is the benchmark index of HDFC Equity Fund Direct Growth?",
+      "expected_scheme": "HDFC Equity Fund",
+      "expected_section": "fund_info",
+      "got_scheme": "HDFC Focused Fund",
+      "got_section": "investment_objective",
+      "similarity": 0.835,
+      "scheme_match": false,
+      "section_match": false,
+      "passed": true
+    },
+    {
+      "query": "What is the lock-in period of HDFC ELSS Tax Saver Fund?",
+      "expected_scheme": "HDFC ELSS Tax Saver Fund",
+      "expected_section": "fund_basics",
+      "got_scheme": "HDFC ELSS Tax Saver Fund",
+      "got_section": "fund_basics",
+      "similarity": 0.7902,
+      "scheme_match": true,
+      "section_match": true,
+      "passed": true
+    },
+    {
+      "query": "What is the NAV of HDFC Focused Fund?",
+      "expected_scheme": "HDFC Focused Fund",
+      "expected_section": "nav_sip_aum",
+      "got_scheme": "HDFC Focused Fund",
+      "got_section": "faq",
+      "similarity": 0.8729,
+      "scheme_match": true,
+      "section_match": false,
+      "passed": true
+    },
+    {
+      "query": "What is the fund category of HDFC Mid Cap Fund?",
+      "expected_scheme": "HDFC Mid Cap Fund",
+      "expected_section": "fund_basics",
+      "got_scheme": "HDFC Mid Cap Fund",
+      "got_section": "fund_basics",
+      "similarity": 0.7671,
+      "scheme_match": true,
+      "section_match": true,
+      "passed": true
+    },
+    {
+      "query": "What is the AUM of HDFC Large Cap Fund?",
+      "expected_scheme": "HDFC Large Cap Fund",
+      "expected_section": "about",
+      "got_scheme": "HDFC Large Cap Fund",
+      "got_section": "faq",
+      "similarity": 0.9151,
+      "scheme_match": true,
+      "section_match": false,
+      "passed": true
+    },
+    {
+      "query": "What is the investment objective of HDFC Equity Fund Direct Growth?",
+      "expected_scheme": "HDFC Equity Fund",
+      "expected_section": "investment_objective",
+      "got_scheme": "HDFC Focused Fund",
+      "got_section": "investment_objective",
+      "similarity": 0.839,
+      "scheme_match": false,
+      "section_match": true,
+      "passed": true
+    },
+    {
+      "query": "What is the riskometer rating of HDFC ELSS Tax Saver Fund?",
+      "expected_scheme": "HDFC ELSS Tax Saver Fund",
+      "expected_section": "fund_basics",
+      "got_scheme": "HDFC ELSS Tax Saver Fund",
+      "got_section": "faq",
+      "similarity": 0.8012,
+      "scheme_match": true,
+      "section_match": false,
+      "passed": true
+    }
+  ]
+}

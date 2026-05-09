@@ -1,0 +1,52 @@
+@import "tailwindcss";
+
+@variant dark (&:where(.dark, .dark *));
+
+/* Groww Design Tokens — from DESIGN.md */
+:root {
+  --surface:                  #f3fbf5;
+  --surface-container-lowest: #ffffff;
+  --surface-container-low:    #edf6ef;
+  --surface-container:        #e8f0e9;
+  --on-surface:               #161d19;
+  --on-surface-variant:       #3c4a43;
+  --outline:                  #6b7b72;
+  --outline-variant:          #bacac1;
+  --primary:                  #006c4f;
+  --primary-container:        #00d09c;
+  --on-primary-container:     #00533c;
+  --secondary:                #3247e2;
+  --secondary-container:      #4f63fb;
+  --error:                    #ba1a1a;
+  --error-container:          #ffdad6;
+}
+
+.dark {
+  --surface:                  #1A1A2E;
+  --surface-container-lowest: #16213E;
+  --surface-container-low:    #1e2a3a;
+  --surface-container:        #16213E;
+  --on-surface:               #eaf3ec;
+  --on-surface-variant:       #bacac1;
+  --outline:                  #3c4a43;
+  --outline-variant:          #2A2A3E;
+  --primary:                  #2fe0aa;
+  --primary-container:        #00d09c;
+}
+
+body {
+  font-family: "DM Sans", Inter, Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  background-color: var(--surface);
+  color: var(--on-surface);
+}
+
+/* Page background — light: mint radial gradient, dark: flat deep navy */
+.page-bg {
+  background: radial-gradient(ellipse at top left, #c8f5e9 0%, #e8f8f2 35%, #f3fbf5 65%, #ffffff 100%);
+}
+
+.dark .page-bg {
+  background: #0d1a14;
+}
