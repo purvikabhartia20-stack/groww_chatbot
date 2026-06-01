@@ -21,12 +21,12 @@
     "amc_name": "HDFC Mutual Fund",
     "source_url": "https://groww.in/mutual-funds/hdfc-mid-cap-fund-direct-growth",
     "document_type": "Groww_Fund_Page",
-    "download_date": "2026-05-09T13:49:49.326389",
+    "download_date": "2026-06-01T11:26:50.109337",
     "status": "success",
     "output_file": "data/raw/hdfc-mid-cap-fund-direct-growth.txt",
     "error": null,
-    "file_size_bytes": 10636,
-    "char_count": 10583
+    "file_size_bytes": 10593,
+    "char_count": 10540
   },
   "hdfc-equity-fund-direct-growth": {
     "slug": "hdfc-equity-fund-direct-growth",
@@ -35,12 +35,12 @@
     "amc_name": "HDFC Mutual Fund",
     "source_url": "https://groww.in/mutual-funds/hdfc-equity-fund-direct-growth",
     "document_type": "Groww_Fund_Page",
-    "download_date": "2026-05-09T13:50:05.726399",
+    "download_date": "2026-06-01T11:27:06.832241",
     "status": "success",
     "output_file": "data/raw/hdfc-equity-fund-direct-growth.txt",
     "error": null,
-    "file_size_bytes": 10710,
-    "char_count": 10657
+    "file_size_bytes": 10695,
+    "char_count": 10642
   },
   "hdfc-focused-fund-direct-growth": {
     "slug": "hdfc-focused-fund-direct-growth",
@@ -49,12 +49,12 @@
     "amc_name": "HDFC Mutual Fund",
     "source_url": "https://groww.in/mutual-funds/hdfc-focused-fund-direct-growth",
     "document_type": "Groww_Fund_Page",
-    "download_date": "2026-05-09T13:50:22.410183",
+    "download_date": "2026-06-01T11:27:23.427986",
     "status": "success",
     "output_file": "data/raw/hdfc-focused-fund-direct-growth.txt",
     "error": null,
-    "file_size_bytes": 10666,
-    "char_count": 10613
+    "file_size_bytes": 10625,
+    "char_count": 10572
   },
   "hdfc-elss-tax-saver-fund-direct-plan-growth": {
     "slug": "hdfc-elss-tax-saver-fund-direct-plan-growth",
@@ -63,12 +63,12 @@
     "amc_name": "HDFC Mutual Fund",
     "source_url": "https://groww.in/mutual-funds/hdfc-elss-tax-saver-fund-direct-plan-growth",
     "document_type": "Groww_Fund_Page",
-    "download_date": "2026-05-09T13:50:38.701781",
+    "download_date": "2026-06-01T11:27:40.131953",
     "status": "success",
     "output_file": "data/raw/hdfc-elss-tax-saver-fund-direct-plan-growth.txt",
     "error": null,
-    "file_size_bytes": 10960,
-    "char_count": 10905
+    "file_size_bytes": 10915,
+    "char_count": 10860
   },
   "hdfc-large-cap-fund-direct-growth": {
     "slug": "hdfc-large-cap-fund-direct-growth",
@@ -77,11 +77,11 @@
     "amc_name": "HDFC Mutual Fund",
     "source_url": "https://groww.in/mutual-funds/hdfc-large-cap-fund-direct-growth",
     "document_type": "Groww_Fund_Page",
-    "download_date": "2026-05-09T13:50:55.422238",
+    "download_date": "2026-06-01T11:27:56.834026",
     "status": "success",
     "output_file": "data/raw/hdfc-large-cap-fund-direct-growth.txt",
     "error": null,
-    "file_size_bytes": 10835,
-    "char_count": 10782
+    "file_size_bytes": 10763,
+    "char_count": 10710
   }
 }
